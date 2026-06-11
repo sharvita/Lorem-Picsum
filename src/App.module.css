@@ -1,0 +1,24 @@
+/**
+ * Root layout shell.
+ *
+ * Strategy for "negative space ≤ 20% of the window":
+ * - The app is a flex column spanning the full dynamic viewport height (100dvh).
+ * - The Clock header is `flex-shrink: 0` so it never grows beyond its content.
+ * - The ImageGrid gets `flex: 1` so it always consumes whatever height remains
+ *   after the clock — meaning content occupies ≥ 80% of the visible window.
+ *
+ * Why `min-height: 100dvh` (dynamic) instead of `100vh`?
+ * - On iOS Safari and Chrome for Android, `100vh` includes the address bar height
+ *   which can cause a small scroll gap. `100dvh` adapts to the actual visible area.
+ */
+
+.app {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  /* A small max-width with auto margins keeps the layout readable on very wide
+     monitors (e.g. 4K) while still filling the space on typical screens. */
+  max-width: 1600px;
+  margin: 0 auto;
+  width: 100%;
+}

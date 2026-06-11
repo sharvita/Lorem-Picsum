@@ -1,0 +1,35 @@
+/**
+ * Three-column image grid.
+ *
+ * Negative space strategy:
+ * - `flex: 1` makes the grid grow to fill all remaining viewport height after
+ *   the Clock header — this is the primary mechanism for keeping empty space ≤ 20%.
+ * - `grid-template-rows: 1fr` forces the single grid row to stretch to the
+ *   grid container's full height so cards fill vertically, not just horizontally.
+ * - `gap` and `padding` are kept tight (12 px) so the inter-card gutters do not
+ *   eat into the content budget.
+ *
+ * Why `minmax(0, 1fr)` on columns?
+ * - Plain `1fr` allows content to overflow the column when images are wide.
+ *   `minmax(0, 1fr)` caps each column at its fair share, enabling `overflow:hidden`
+ *   on the card to work correctly.
+ */
+
+.grid {
+  flex: 1;           /* consume all height below the clock */
+  min-height: 0;     /* override flex default min-height: auto so flex: 1 works */
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-rows: 1fr;   /* single row stretches to fill grid height */
+  gap: 12px;
+  padding: 12px;
+}
+
+/* ── Mobile: single column ───────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: 1fr;
+    /* On mobile three rows; each gets equal share of height */
+    grid-template-rows: repeat(3, 1fr);
+  }
+}

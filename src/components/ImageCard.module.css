@@ -1,0 +1,171 @@
+/**
+ * ImageCard layout.
+ *
+ * The card is a flex column:
+ *   [meta block]     ← id, dimensions, load time (ABOVE the image — assignment req.)
+ *   [image wrapper]  ← grows to fill all remaining card height
+ *   [author]         ← below the image (assignment req.)
+ *
+ * Why `flex: 1` on the image wrapper instead of a fixed `aspect-ratio`?
+ * - We want cards to fill the grid cell height so that the grid itself can fill
+ *   the viewport. A fixed aspect-ratio would make the card shrink to the image
+ *   size and leave empty space below — violating the ≤ 20% negative space rule.
+ * - `object-fit: cover` inside the wrapper still crops/fills correctly regardless
+ *   of the container's actual dimensions.
+ *
+ * The solid border color is applied inline per card (index-based palette) because
+ * CSS Modules cannot accept dynamic values; inline style is the correct tool here.
+ */
+
+.card {
+  display: flex;
+  flex-direction: column;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #ffffff;
+  /* height: 100% ensures the card fills its grid cell */
+  height: 100%;
+  /* border applied inline — see BORDER_COLORS in ImageCard.tsx */
+}
+
+/* ── Meta block (above the image) ─────────────────────────────────────────── */
+
+.meta {
+  padding: 8px 10px 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  background: #f8fafc;
+  border-bottom: 1px solid #e2e8f0;
+  /* shrink-wrap — do not eat into image space */
+  flex-shrink: 0;
+}
+
+.metaRow {
+  font-size: 0.78rem;
+  color: #475569;
+  /* tabular-nums keeps digit widths consistent so numbers don't shift layout */
+  font-variant-numeric: tabular-nums;
+}
+
+.metaLabel {
+  font-weight: 700;
+  color: #0f172a;
+  margin-right: 4px;
+}
+
+/* ── Image wrapper ──────────────────────────────────────────────────────────── */
+
+.imageWrapper {
+  /* flex: 1 makes the image fill all card height not used by meta + author.
+     This is the key to keeping negative space ≤ 20% — the image grows with
+     the grid cell rather than locking to a fixed aspect ratio. */
+  flex: 1;
+  min-height: 0;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+/*
+ * Hover overlay — a semi-transparent tint with a hint text so users know
+ * the image is a tap target. Uses a pseudo-element so no extra DOM node needed.
+ * `pointer-events: none` on the text keeps the click event on the wrapper.
+ */
+.imageWrapper::after {
+  content: 'Tap for new image';
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  color: #ffffff;
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+}
+
+.imageWrapper:hover::after,
+.imageWrapper:focus-visible::after {
+  opacity: 1;
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  /* cover: fill the box, crop rather than distort or letter-box */
+  object-fit: cover;
+  display: block;
+  /* subtle fade-in so parallel loads don't feel jarring */
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* ── Author (below the image) ──────────────────────────────────────────────── */
+
+.author {
+  padding: 6px 10px 8px;
+  font-size: 0.82rem;
+  color: #334155;
+  font-style: italic;
+  flex-shrink: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  background: #f8fafc;
+  border-top: 1px solid #e2e8f0;
+}
+
+/* ── Loading skeleton ──────────────────────────────────────────────────────── */
+
+.skeleton {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  min-height: 200px;
+  gap: 8px;
+  color: #94a3b8;
+  font-size: 0.9rem;
+}
+
+.spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid #e2e8f0;
+  border-top-color: #64748b;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Error state ────────────────────────────────────────────────────────────── */
+
+.errorState {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  min-height: 200px;
+  color: #ef4444;
+  font-size: 0.85rem;
+  padding: 12px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.errorState:hover {
+  background: #fef2f2;
+}

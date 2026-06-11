@@ -1,0 +1,27 @@
+/**
+ * Clock region: centered band near the top of the viewport.
+ *
+ * Why `text-align: center` + `justify-content: center`?
+ * - Belt-and-suspenders: flex centering handles the element position; text-align
+ *   handles wrapping lines on very narrow screens.
+ */
+
+.clock {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 16px;
+  text-align: center;
+  border-bottom: 1px solid #e2e8f0;
+  background: #ffffff;
+  /* Shrink-wrap height to content so the grid below can use `flex: 1` to fill the
+     rest of the viewport — part of the ≤20% negative-space strategy in Step 6. */
+  flex-shrink: 0;
+}
+
+.time {
+  font-size: 1.15rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  color: #0f172a;
+}

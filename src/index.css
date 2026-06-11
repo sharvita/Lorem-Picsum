@@ -1,0 +1,38 @@
+/**
+ * Global baseline styles for the app shell (Step 1).
+ *
+ * Why here instead of only CSS Modules?
+ * - `html` / `body` / `#root` height is a cross-cutting concern: every page needs
+ *   the root to stretch so our Step 6 “fill the viewport / limit negative space”
+ *   layout has a predictable foundation.
+ * - CSS Modules stay scoped to components; globals belong in one small file.
+ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  font-family:
+    system-ui,
+    -apple-system,
+    Segoe UI,
+    Roboto,
+    Helvetica,
+    Arial,
+    sans-serif;
+  line-height: 1.4;
+  color: #0f172a;
+  /* Slate-50 background — matches the card meta strip so the page feels cohesive.
+     Also fills any margin outside the max-width container on very wide screens. */
+  background: #f1f5f9;
+}
