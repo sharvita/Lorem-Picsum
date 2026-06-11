@@ -4,7 +4,7 @@ A React + TypeScript app that displays random photos from [Lorem Picsum](https:/
 
 ## Live demo
 
-> (https://github.com/sharvita/picsum-viewer)
+> (https://lorem-picsum-psi.vercel.app/#)
 
 ---
 
